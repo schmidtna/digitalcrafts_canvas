@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canvas Demo</title>
+</head>
+<body>
+    <canvas width="400" height="400"></canvas>
+
+    <script>
+
+        var current;
+        var past;
+
+        var canvas = document.querySelector('canvas');
+        var ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'red';
+
+        function draw (past, current) {
+            ctx.moveTo(past[0], past[1]);
+            ctx.quadraticCurveTo(
+                past[0], past[1],
+                current[0], current[1]
+            );
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+
+        var mouse_down = false;
+        canvas.addEventListener('mousedown', function(event) {
+            mouse_down = true;
+            console.log('down', event.offsetX, event.offsetY);
+        });
+        canvas.addEventListener('mouseup', function(event) {
+            mouse_down = false;
+            past = null;
+            console.log('up', event.offsetX, event.offsetY);
+        });
+        canvas.addEventListener('mousemove', function (event) {
+            if (mouse_down) {
+                current = [event.offsetX, event.offsetY];
+                if (past) {
+                    draw(past, current);
+                }
+                past = [event.offsetX, event.offsetY];
+                console.log('move', event.offsetX, event.offsetY);
+            }
+        });
+      
+    </script>
+</body>
+</html>
